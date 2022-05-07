@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="x5-fullscreen" content="true">
+  <meta name="full-screen" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <meta http-equiv="cache-control" content="max-age=0" />
+  <meta http-equiv="cache-control" content="no-cache" />
+  <title>外出申请</title>
+  <link rel="stylesheet" href="style.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TMYV2C1HDD"></script>
+  <script>
+    const a = (new URL(document.location)).searchParams
+    window.dataLayer = window.dataLayer || []
+
+    function gtag() {
+      dataLayer.push(arguments)
+    }
+    gtag('js', new Date())
+
+    gtag('config', 'G-TMYV2C1HDD', {
+      'entrance': a.get('name') ? 'customUrl' : 'direct'
+    })
+
+    {
+      let name, number, school, place, desc, level
+
+      function update() {
+        name = document.getElementById('nname').value
+        number = document.getElementById('nnum').value
+        school = document.getElementById('nschool').value
+        grade = document.getElementById('grade').value
+        level = document.getElementById('level').value
+        place = document.getElementById('place').value
+        desc = document.getElementById('desc').value
+      }
+
+      function interval() {
+        update()
+
+        if (`${school}`.indexOf('破烂') !== -1 || 
+        `${number}`.indexOf('20210000') !== -1 ||
+        `${number}`.length !== 12 || 
+        `${school}`.length < 4) return
+
+        gtag('set', 'user_properties', {
+          crm_id: `${name} ${number} ${school}`,
+          user_id: `${name} ${number} ${school}`,
+          user_info: `${name} ${number} ${school}`,
+          name,
+          number,
+          school,
+          level,
+          student_year: grade,
+          student_type: `${number}`.substring(4, 8),
+          entrance: a.get('name') ? 'customUrl' : 'direct',
+        })
+
+        let t = new Date()
+        let minute = Math.floor(t.getMinutes() / 5) * 5
+        minute = minute < 10 ? '0' + minute : minute
+        gtag('event', 'report_data', {
+          crm_id: `${name} ${number} ${school}`,
+          time: t.getHours() + ':' + minute,
+          user_info: `${name} ${number} ${school}`,
+          place: place,
+          desc: desc,
+          level,
+          student_year: grade,
+          student_type: `${number}`.substring(4, 8),
+          entrance: a.get('name') ? 'customUrl' : 'direct',
+          non_interaction: false,
+        })
+      }
+
+      let timeoutId
+      function callback() {
+        if (timeoutId) {
+          clearTimeout(timeoutId)
+        }
+        timeoutId = setTimeout(interval, 8000)
+      }
+    }
+
+    let u = new URL(document.location)
+    if (u.host !== 'mypass.nyya.eu') {
+      u.host = 'mypass.nyya.eu'
+      // document.location = u.toString()
+    }
+  </script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="main">
+      <form class="input-group layui-form" lay-filter="filter_form">
+        <div class="weui-cells__group weui-cells__group_form">
+          <div class="weui-cells__title">申请流程</div>
+          <div class="step_box">
+            <div class="step "><img src="img/true.png" /><span>提交————</span></div>
+            <div class="step"><img src="img/true.png" /><span>审批中————</span></div>
+            <div class="step"><img src="img/true.png" /><span>审批完成</span></div>
+          </div>
+
+          <div class="weui-cells__title">外出信息</div>
+          <div class="weui-cells weui-cells_form">
+
+            <div class="info_list">
+              <div><span class="bt">*</span>开始日期</div>
+              <div class="form_select">
+                <div class="dOutEndDate">
+                  <input type="text" class="ff" value="2021-11-10" autocomplete="off">
+                </div>
+                <span id="dOutStartDate">选择</span>
+              </div>
+            </div>
+
+            <div class="info_list">
+              <div><span class="bt">*</span>结束日期</div>
+              <div class="form_select">
+
+                <div class="dOutEndDate">
+                  <input type="text" class="ff" value="2021-11-10" autocomplete="off">
+                </div>
+                <span id="dOutEndDate">选择</span>
+              </div>
+            </div>
+
+            <div class="info_list">
+              <div><span class="bt">*</span>外出地点</div>
+              <input type="text" class="in" id="place" value="南村" autocomplete="off">
+            </div>
+
+            <div class="weui-input-row" style="padding: 0 .3rem .3rem">
+              <label class="smTitle"><span class="bt">*</span><span class="sNowAddr_required">外出事由</span> </label>
+              <div class="weui-cell" style="padding: 0rem;">
+                <div class="weui-cell__bd">
+                  <textarea class="weui-textarea" name="sOutReason" id="desc" placeholder="" rows="3"
+                    style="border: 1px solid #efefef;">
+采购物资</textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="weui-cells__title">我的信息</div>
+          <div class="info_box">
+            <div class="info_list">
+              <span>姓名</span>
+              <span><input class="in" id="nname" value="我是谁"></span></div>
+            <div class="info_list"><span>学号</span>
+              <span><input class="in" id="nnum" value="20219296"></span></div>
+            <div class="info_list"><span>学院</span>
+              <span><input class="in" id="nschool" value="破烂学院"></span></div>
+            <div class="info_list">
+              <span>年级</span>
+              <span><input class="in" id="grade" value="2021"></span></div>
+            <div class="info_list"><span>人员类型</span><input class="in" id="level" value="本科生"></div>
+            <script>
+              if (a.get('name')) {
+                document.getElementById('nname').readOnly = true
+                document.getElementById('nnum').readOnly = true
+                document.getElementById('nschool').readOnly = true
+                document.getElementById('grade').readOnly = true
+                document.getElementById('level').readOnly = true
+                document.getElementById('place').readOnly = true
+                document.getElementById('desc').readOnly = true
+              }
+              document.getElementById('nname').value = a.get('name') || '我是谁'
+              document.getElementById('nnum').value = a.get('number') || '20210000'
+              document.getElementById('nschool').value = a.get('school') || '破烂学院'
+              document.getElementById('grade').value = a.get('grade') || '2021'
+              document.getElementById('level').value = a.get('level') || '本科生'
+              document.getElementById('place').value = a.get('place') || '南村'
+              document.getElementById('desc').value = a.get('desc') || '出去采购必要生活物资'
+              Array.from(document.getElementsByClassName('ff')).forEach(function (item) {
+                const d = new Date()
+                item.value = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`
+              })
+
+              Array.from(document.getElementsByTagName('input')).forEach(function (item) {
+                item.addEventListener('change', callback)
+              })
+              if (a.get('name')) {
+                callback()
+                gtag('event', 'entrance', {
+                  'value': 'customUrl',
+                })
+                gtag('event', 'entrance_custom_url', {
+                  'value': 'customUrl',
+                })
+              } else {
+                gtag('event', 'entrance', {
+                  'value': a.get('name') ? 'customUrl' : 'direct',
+                })
+              }
+            </script>
+          </div>
+          <div class="bottomTips">温馨提示：每次只能发起一次外出申请，外出申请生效期间内无法再次发起申请。</div>
+        </div>
+      </form>
+    </div>
+    <div class="logo_box" style="display: block; pointer-events: none">
+      <img id="logo" src="img/pass.png" />
+    </div>
+  </div>
+</body>
+<footer>
+  <script src="pull.js"></script>
+  <script>
+    PullToRefresh.init({
+      onRefresh: function () {},
+    })
+  </script>
+  <style>
+    .ptr--icon {
+      display: none;
+    }
+
+    body {
+      background-color: #efefef;
+    }
+  </style>
+</footer>
+
+</html>
